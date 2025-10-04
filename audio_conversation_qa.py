@@ -7,6 +7,8 @@ Usage:
   python audio_conversation_qa.py --audio "/path/to/audio_file.(wav|mp3|m4a|flac)" \
                                   --question "What did the speaker say about timelines?"
 
+python audio_conversation_qa.py --audio "audio2.mp3" --question "explain iphone 17 pro"
+
 What it does:
 1) Transcribes the conversation from an audio file using OpenAI Whisper (offline).
 2) Chunks the transcript with timestamps.
@@ -14,24 +16,21 @@ What it does:
 4) Attempts extractive QA on each top chunk; if not confident, uses a generative fallback.
 5) Prints the best answer and shows timestamped sources from the audio.
 
-Dependencies (install if needed):
+Dependencies (install if needed):   
   pip install openai-whisper transformers sentence-transformers torch numpy
 
 Tip: For faster inference on supported hardware, install PyTorch with GPU support.
 """
 
-import argparse
-import math
-import os
-import re
-import sys
+import argparse #lets your script read command-line options like --input file.wav.
+import re #“find/replace by pattern” (regular expressions).
 from dataclasses import dataclass
-from typing import List, Tuple, Optional, Dict
+from typing import List, Tuple, Optional, Dict #type hints to make code clearer.
 
-import numpy as np
-import torch
-import whisper
-from sentence_transformers import SentenceTransformer
+import numpy as np #– fast math on arrays (vectors/matrices).
+import torch #– PyTorch; runs neural nets on CPU/GPU.
+import whisper #OpenAI’s speech-to-text (transcribes audio files).
+from sentence_transformers import SentenceTransformer #turns sentences into vectors (embeddings) you can compare.
 from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
 
 
